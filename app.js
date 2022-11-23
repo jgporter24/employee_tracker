@@ -97,7 +97,7 @@ function viewDepts() {
         if (err) throw err;
         console.log("Displaying all departments:");
         console.table(data);
-        start();
+        employee_db();
     });
 }
 
@@ -107,7 +107,7 @@ function viewRoles() {
         if (err) throw err;
         console.log("Displaying all roles:");
         console.table(data);
-        start();
+        employee_db();
     });
 }
 
@@ -117,7 +117,7 @@ function viewEes() {
         if (err) throw err;
         console.log("Displaying all employees:");
         console.table(data);
-        start();
+        employee_db();
     });
 }
 
@@ -145,7 +145,7 @@ function addDept() {
             (err) => {
                 if (err) throw err;
                 console.log(`New department ${answer.department} has been added!`);
-                start();
+                employee_db();
             }
         );
     });
@@ -211,7 +211,7 @@ function addRole() {
                 (err) => {
                     if (err) throw err;
                     console.log(`New role ${answer.title} has been added!`);
-                    start();
+                    employee_db();
                 }
             )
         });
@@ -282,7 +282,7 @@ function addEe() {
                 (err) => {
                     if (err) throw err;
                     console.log(`New employee ${answer.firstName} ${answer.lastName} has been added! as a ${answer.role}`);
-                    start();
+                    employee_db();
                 }
             )
         });
@@ -352,7 +352,7 @@ function update() {
                 (err) => {
                     if (err) throw err;
                     console.log(`Role has been updated!`);
-                    start();
+                    employee_db();
                 }
             )
         });
