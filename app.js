@@ -1,17 +1,3 @@
-//requirements
-// Build a command-line application that at a minimum allows the user to:
-// Add departments, roles, employees
-// View departments, roles, employees
-// Update employee roles
-
-// Bonus points if you're able to:
-// Update employee managers
-// View employees by manager
-// Delete departments, roles, and employees
-// View the total utilized budget of a department -- ie the combined salaries of all employees in that department
-
-//================================================
-
 //dependencies
 const express = require('express');
 const mysql = require("mysql2");
@@ -30,25 +16,26 @@ figlet("Employee \n \n Manager", (err, data) => {
     console.log(data);
 })
 
-//create the connection for database
-const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3000,
-    user: "root",
-    password: "root",
-    database: "employee_db"
-});
+// Connect to database
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        // MySQL username,
+        user: 'root',
+        password: 'secret',
+        database: 'employee_db'
+    });
 
-connection.connect(err => {
+db.connect(err => {
     if (err) throw err;
     console.log('connection established!');
-    start();
+    employee_db();
 });
 
 // Add departments, roles, employees
 // View departments, roles, employees
 // Update employee roles
-function start() {
+var employee_db = function () {
     inquirer.prompt({
         name: "action",
         type: "list",
@@ -94,17 +81,19 @@ function start() {
                 break;
 
             case "Exit":
-                connection.end();
+                db.end();
                 break;
         }
+        
     });
+   
 }
 
 //===================functions=====================
 
 // function to View all departments,
 function viewDepts() {
-    connection.query("SELECT * FROM department", (err, data) => {
+    db.query("SELECT * FROM department", (err, data) => {
         if (err) throw err;
         console.log("Displaying all departments:");
         console.table(data);
@@ -114,7 +103,7 @@ function viewDepts() {
 
 // function to View all roles
 function viewRoles() {
-    connection.query("SELECT * FROM role", (err, data) => {
+    db.query("SELECT * FROM role", (err, data) => {
         if (err) throw err;
         console.log("Displaying all roles:");
         console.table(data);
@@ -124,7 +113,7 @@ function viewRoles() {
 
 // function to View all employees
 function viewEes() {
-    connection.query("SELECT * FROM employee", (err, data) => {
+    db.query("SELECT * FROM employee", (err, data) => {
         if (err) throw err;
         console.log("Displaying all employees:");
         console.table(data);
@@ -148,7 +137,7 @@ function addDept() {
             }
         },
     ]).then(answer => {
-        connection.query(
+        db.query(
             "INSERT INTO department SET ?",
             {
                 name: answer.department
@@ -165,7 +154,7 @@ function addDept() {
 // function to Add a role; prompt role, salary and department
 function addRole() {
     const sql = "SELECT * FROM department";
-    connection.query(sql, (err, results) => {
+    db.query(sql, (err, results) => {
         if (err) throw err;
 
         inquirer.prompt([
@@ -212,7 +201,7 @@ function addRole() {
                 }
             }
 
-            connection.query(
+            db.query(
                 "INSERT INTO role SET ?",
                 {
                     title: answer.title,
@@ -232,7 +221,7 @@ function addRole() {
 // function to Add an employee
 function addEe() {
     const sql = "SELECT * FROM employee, role";
-    connection.query(sql, (err, results) => {
+    db.query(sql, (err, results) => {
         if (err) throw err;
 
         inquirer.prompt([
@@ -283,7 +272,7 @@ function addEe() {
                 }
             }
 
-            connection.query(
+            db.query(
                 "INSERT INTO employee SET ?",
                 {
                     first_name: answer.firstName,
@@ -302,7 +291,7 @@ function addEe() {
 
 // function to Update employee role
 function update() {
-    connection.query("SELECT * FROM employee, role", (err, results) => {
+    db.query("SELECT * FROM employee, role", (err, results) => {
         if (err) throw err;
 
         inquirer.prompt([
@@ -350,7 +339,7 @@ function update() {
                 }
             }
 
-            connection.query(
+            db.query(
                 "UPDATE employee SET ? WHERE ?",
                 [
                     {
@@ -366,6 +355,14 @@ function update() {
                     start();
                 }
             )
-        })
-    })
+        });
+    });
 }
+
+app.use((req, res) => {
+    res.status(404).end();
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
