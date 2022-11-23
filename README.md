@@ -18,7 +18,7 @@ npm install
 ## Usage
 To start using the application run "npm start" in the command line. Follow the prompts to finish the application. See below for sample images and video. 
 
-
+![Video Example](assets/employeetracker.gif)
 
 ## Contribution
 * JavaScript
