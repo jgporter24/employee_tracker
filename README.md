@@ -20,6 +20,10 @@ To start using the application run "npm start" in the command line. Follow the p
 
 ![Video Example](assets/employeetracker.gif)
 
+![Image Example](assets/employee_tracker.png)
+
+![Image Example](assets/employee_tracker1.png)
+
 ## Contribution
 * JavaScript
 * Node.js
